@@ -1,27 +1,25 @@
-pipeline{
-    agent{
-        docker{
+pipeline {
+    agent {
+        docker {
             image 'ruby:2.7.4'
+            args '-v C:/Users/Pc/OneDrive/Área de Trabalho/curso_automacao_e2e_api:/workspace'
         }
     }
 
-    triggers{
+    triggers {
         cron('H/30 * * * *')
     }
 
-    stages{
-        stage('preparação'){
-            steps{
-                sh 'ruby --version'
-                sh 'apt-get update'
-                sh 'apt-get install sudo'
-                sh 'sudo apt-get -y install freetds-dev'
-                sh 'bundle install'
+    stages {
+        stage('preparação') {
+            steps {
+                bat 'ruby --version'
+                bat 'bundle install'
             }
         }
-        stage('Regressivo API'){
-            steps{
-                sh 'cucumber -t @automation_api'
+        stage('Regressivo API') {
+            steps {
+                bat 'cd /workspace && cucumber -t @automation_api'
             }
         }
     }
